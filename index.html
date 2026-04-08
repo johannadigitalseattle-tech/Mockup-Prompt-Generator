@@ -146,9 +146,49 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;o
 .footer-legal{font-size:10px;color:#bbb;line-height:1.8}
 .footer-legal a{color:var(--coral);text-decoration:none}
 .footer-legal a:hover{text-decoration:underline}
+
+/* PASSWORD OVERLAY */
+.pw-overlay{position:fixed;inset:0;background:var(--cream);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.pw-card{background:#fff;border-radius:20px;border:2px solid var(--border);box-shadow:0 8px 40px rgba(232,99,90,.15);padding:40px 36px;max-width:400px;width:100%;text-align:center}
+.pw-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;background:linear-gradient(90deg,var(--coral),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.pw-sub{font-size:12px;color:var(--gray);margin-bottom:28px;line-height:1.6}
+.pw-label{display:block;font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;text-align:left}
+.pw-input{width:100%;padding:12px 16px;border-radius:12px;border:2px solid var(--border);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;color:var(--dark);margin-bottom:14px;text-align:center;letter-spacing:.06em;transition:border .2s}
+.pw-input:focus{border-color:var(--coral)}
+.pw-btn{width:100%;padding:13px;border-radius:12px;border:none;background:var(--coral);color:#fff;font-family:'Playfair Display',serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(232,99,90,.3);transition:all .2s}
+.pw-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.pw-err{font-size:12px;color:#c0392b;font-weight:600;margin-top:10px;display:none;padding:8px;background:#fff0f0;border-radius:8px}
+.pw-dots{display:flex;justify-content:center;gap:6px;margin-bottom:24px}
+.pw-dot{width:8px;height:8px;border-radius:50%}
 </style>
 </head>
 <body>
+
+<!-- PASSWORD OVERLAY -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-card">
+    <div class="pw-logo">Mockup Prompt Generator</div>
+    <div class="pw-sub">Johanna Digital Seattle<br>Herramienta exclusiva — acceso privado</div>
+    <div class="pw-dots">
+      <div class="pw-dot" style="background:var(--coral)"></div>
+      <div class="pw-dot" style="background:var(--yellow)"></div>
+      <div class="pw-dot" style="background:var(--teal)"></div>
+    </div>
+    <label class="pw-label">Clave de acceso</label>
+    <input class="pw-input" type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">✦ Entrar</button>
+    <div class="pw-err" id="pwErr">❌ Clave incorrecta. Intenta de nuevo.</div>
+  </div>
+  <div style="position:fixed;bottom:0;left:0;right:0;text-align:center;padding:14px 20px;border-top:1px solid var(--border);background:var(--cream)">
+    <div style="font-size:12px;font-weight:700;background:linear-gradient(90deg,var(--coral),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block;margin-bottom:5px">Mockup Prompt Generator ✦ Johanna Digital Seattle</div><br>
+    <div style="font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Follow us</div>
+    <div style="display:flex;justify-content:center;gap:8px;margin-bottom:8px">
+      <a href="https://www.tiktok.com/@johannadigitalseattle" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:4px 13px;border-radius:40px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:600;color:var(--gray);text-decoration:none">TikTok</a>
+      <a href="https://www.pinterest.com/johannadigitalseattle" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:4px 13px;border-radius:40px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:600;color:var(--gray);text-decoration:none">Pinterest</a>
+    </div>
+    <div style="font-size:10px;color:#bbb;line-height:1.7">© 2025 Johanna Digital Seattle · All rights reserved · Not for resale or redistribution · <a href="https://johadigitalseattle.com" target="_blank" style="color:var(--coral);text-decoration:none">johadigitalseattle.com</a></div>
+  </div>
+</div>
 
 <div class="hdr-wrap">
 <div class="hdr">
@@ -567,6 +607,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;o
 </div>
 
 <script>
+function checkPw() {
+  var val = document.getElementById('pwInput').value;
+  var err = document.getElementById('pwErr');
+  if (val === 'MUG2026$') {
+    document.getElementById('pwOverlay').style.display = 'none';
+    err.style.display = 'none';
+  } else {
+    err.style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
 var S = {
   product:'notebook', platform:'amazon',
   size:'7.5 x 9.25 inches', brand:'Bella Canvas', shirtColor:'White',
