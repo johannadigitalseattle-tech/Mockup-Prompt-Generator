@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup Prompt Generator — Johanna Digital Seattle</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coral:#E8635A;--teal:#5BAB9F;--yellow:#F5C842;
+  --pink:#F0A0A0;--pink-wash:#F9E8E2;--dark:#2C1810;
+  --cream:#FDF4F0;--white:#fff;--gray:#7a6960;--border:#F2D5CC;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.hdr-wrap{max-width:860px;margin:0 auto;padding:20px 20px 0}
+.hdr{background:var(--coral);padding:0;position:relative;overflow:hidden;border-radius:18px;border:2px solid #D4554D;box-shadow:0 6px 28px rgba(232,99,90,.22)}
+.hdr-inner{padding:40px 28px 36px;position:relative;z-index:2}
+.hdr::before{content:'';position:absolute;top:-50px;right:-50px;width:280px;height:280px;background:#fff;border-radius:50%;opacity:.08}
+.hdr::after{content:'';position:absolute;bottom:-60px;left:8%;width:200px;height:200px;background:var(--yellow);border-radius:50%;opacity:.18}
+.hdr-tag{display:inline-block;background:rgba(255,255,255,.22);color:#fff;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:40px;margin-bottom:14px;border:1.5px solid rgba(255,255,255,.35)}
+.hdr h1{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,44px);font-weight:900;color:#fff;line-height:1.15;margin-bottom:10px}
+.hdr h1 em{color:var(--yellow);font-style:normal}
+.hdr p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.7;max-width:520px}
+.dots{display:flex;gap:8px;margin-top:18px}
+.dot{width:10px;height:10px;border-radius:50%}
+
+/* MAIN */
+.main{max-width:820px;margin:0 auto;padding:28px 20px 60px}
+
+/* STEP LABEL */
+.step-label{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.step-num{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.sn1{background:var(--coral)}.sn2{background:var(--teal)}.sn3{background:var(--yellow);color:var(--dark)}
+.sn4{background:var(--pink);color:var(--dark)}.sn5{background:var(--coral)}.sn6{background:var(--teal)}.sn7{background:var(--dark)}
+.step-title{font-size:15px;font-weight:700;color:var(--dark)}
+.step-sub{font-size:11px;color:var(--gray)}
+
+/* CARD */
+.card{background:#fff;border-radius:20px;padding:24px;margin-bottom:18px;border:1.5px solid var(--border);box-shadow:0 2px 16px rgba(232,99,90,.06);animation:up .35s ease both}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}
+.card:nth-child(3){animation-delay:.12s}.card:nth-child(4){animation-delay:.16s}
+.card:nth-child(5){animation-delay:.20s}.card:nth-child(6){animation-delay:.24s}
+.divider{border:none;border-top:2px solid var(--pink-wash);margin-bottom:18px}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:520px){.g3,.g4,.g5{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+
+/* OPTION BUTTON */
+.opt{padding:12px 8px;border-radius:12px;border:2px solid #e8ddd9;background:#fff;cursor:pointer;transition:all .18s;text-align:center;font-family:'DM Sans',sans-serif;width:100%}
+.opt:hover{border-color:var(--coral);background:#FEF0EE}
+.opt.on{border-color:var(--coral);background:#FEF0EE;box-shadow:0 0 0 3px rgba(232,99,90,.13)}
+.opt-ico{font-size:22px;margin-bottom:5px;display:block}
+.opt-lbl{font-size:12px;font-weight:600;color:var(--dark);line-height:1.3;display:block}
+.opt-sub{font-size:10px;color:var(--gray);display:block;margin-top:2px}
+
+/* DYNAMIC SECTION */
+.dyn{display:none}.dyn.show{display:block}
+
+/* CUSTOM SIZE */
+.cbox{margin-top:14px;padding:16px;background:var(--pink-wash);border-radius:12px;border:1.5px dashed #E0A89E;display:none}
+.cbox.show{display:block}
+.crow{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.ig{flex:1;min-width:70px}
+.ig label{display:block;font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px}
+.ig input{width:100%;padding:9px 11px;border-radius:9px;border:1.5px solid #e0d4cf;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;background:#fff;color:var(--dark)}
+.ig input:focus{border-color:var(--coral)}
+.sep{font-size:16px;color:var(--gray);padding-bottom:8px;font-weight:700}
+.utog{display:flex;border-radius:9px;overflow:hidden;border:1.5px solid #e0d4cf}
+.ubtn{padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;background:#fff;color:var(--gray);transition:all .2s}
+.ubtn.on{background:var(--coral);color:#fff}
+.cres{margin-top:10px;padding:9px 13px;background:#fff;border-radius:8px;border:1.5px solid var(--teal);font-size:13px;color:var(--teal);font-weight:600;display:none}
+.cres.show{display:block}
+
+/* SHIRT COLORS */
+.swatch-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.swatch{width:38px;height:38px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all .2s;position:relative}
+.swatch.on{border-color:var(--dark);transform:scale(1.15)}
+.swatch-label{font-size:10px;color:var(--gray);text-align:center;margin-top:3px;display:block;width:38px}
+
+/* SKIN ROW */
+.skin-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.skin{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all .2s}
+.skin.on{border-color:var(--dark);transform:scale(1.15)}
+
+/* PLATFORM PILLS */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:8px 18px;border-radius:40px;border:2px solid #e8ddd9;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--gray);transition:all .18s;font-family:'DM Sans',sans-serif}
+.pill:hover{border-color:var(--coral);color:var(--coral)}
+.pill.on{border-color:var(--coral);background:var(--coral);color:#fff}
+
+/* SECTION MINI LABEL */
+.mlbl{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:block}
+
+/* GEN BUTTON */
+.gen-wrap{text-align:center;margin:24px 0 0}
+.gen-btn{display:inline-flex;align-items:center;gap:10px;background:var(--coral);color:#fff;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;padding:18px 52px;border-radius:60px;border:none;cursor:pointer;transition:all .25s;box-shadow:0 6px 28px rgba(232,99,90,.38);position:relative;overflow:hidden}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(232,99,90,.48);filter:brightness(1.05)}
+.gen-btn span{position:relative;z-index:1}
+
+/* RESULTS */
+.results{margin-top:28px;display:none}
+.results.show{display:block}
+.res-hdr{text-align:center;margin-bottom:22px}
+.res-hdr h2{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--dark)}
+.res-hdr p{font-size:13px;color:var(--gray);margin-top:4px}
+
+.pcard{border-radius:20px;padding:24px;margin-bottom:16px;position:relative}
+.pc-g{background:#EDF7F6;border:2px solid var(--teal)}
+.pc-gr{background:#FEF0EE;border:2px solid var(--coral)}
+.pc-mj{background:#2C1810;border:2px solid var(--yellow)}
+
+.pbadge{display:inline-flex;align-items:center;gap:6px;padding:4px 13px;border-radius:40px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.bg-t{background:var(--teal);color:#fff}
+.bg-c{background:var(--coral);color:#fff}
+.bg-y{background:var(--yellow);color:var(--dark)}
+
+.ptitle{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:2px}
+.pc-mj .ptitle{color:#fff}
+.pdesc{font-size:12px;color:var(--gray);margin-bottom:12px}
+.pc-mj .pdesc{color:rgba(255,255,255,.5)}
+
+.ptext{background:#fff;border-radius:11px;padding:15px;font-size:12.5px;line-height:1.8;color:#333;white-space:pre-wrap;word-break:break-word;border:1.5px solid rgba(0,0,0,.06);margin-bottom:12px}
+.pc-mj .ptext{background:rgba(255,255,255,.07);color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.1)}
+
+.cpbtn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:40px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+.cp-t{background:var(--teal);color:#fff}
+.cp-c{background:var(--coral);color:#fff}
+.cp-y{background:var(--yellow);color:var(--dark)}
+.cpbtn:hover{opacity:.85;transform:translateY(-1px)}
+
+.footer{max-width:860px;margin:0 auto;padding:0 20px 24px}
+.footer-inner{border-top:1px solid var(--border);padding-top:16px;text-align:center}
+.footer-name{font-size:13px;font-weight:700;background:linear-gradient(90deg,var(--coral),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block;margin-bottom:8px}
+.footer-follow{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.footer-socials{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
+.fsoc{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:40px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:600;color:var(--gray);text-decoration:none;transition:border-color .2s,color .2s}
+.fsoc:hover{border-color:var(--coral);color:var(--coral)}
+.footer-legal{font-size:10px;color:#bbb;line-height:1.8}
+.footer-legal a{color:var(--coral);text-decoration:none}
+.footer-legal a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="hdr-wrap">
+<div class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-tag">✦ Johanna Digital Seattle</div>
+    <h1>Mockup Prompt<br><em>Generator</em></h1>
+    <p>Genera prompts hiperrealistas para cualquier producto. Compatible con Gemini, Grok, ChatGPT y Midjourney.</p>
+    <div class="dots">
+      <div class="dot" style="background:#fff;opacity:.9"></div>
+      <div class="dot" style="background:var(--yellow)"></div>
+      <div class="dot" style="background:#fff;opacity:.5"></div>
+      <div class="dot" style="background:var(--teal)"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="main">
+
+  <!-- STEP 1: PRODUCT TYPE -->
+  <div class="card">
+    <div class="step-label"><div class="step-num sn1">1</div><div><div class="step-title">Tipo de producto</div><div class="step-sub">¿Qué producto vas a mostrar?</div></div></div>
+    <hr class="divider">
+    <div class="g4">
+      <button class="opt on" onclick="selProd(this,'notebook')"><span class="opt-ico">📓</span><span class="opt-lbl">Cuaderno</span><span class="opt-sub">Notebook KDP</span></button>
+      <button class="opt" onclick="selProd(this,'book')"><span class="opt-ico">📗</span><span class="opt-lbl">Libro</span><span class="opt-sub">Book KDP</span></button>
+      <button class="opt" onclick="selProd(this,'tshirt')"><span class="opt-ico">👕</span><span class="opt-lbl">Camiseta</span><span class="opt-sub">T-shirt</span></button>
+      <button class="opt" onclick="selProd(this,'hoodie')"><span class="opt-ico">🧥</span><span class="opt-lbl">Hoodie</span><span class="opt-sub">Sudadera</span></button>
+      <button class="opt" onclick="selProd(this,'mug')"><span class="opt-ico">☕</span><span class="opt-lbl">Taza</span><span class="opt-sub">Mug</span></button>
+      <button class="opt" onclick="selProd(this,'sticker')"><span class="opt-ico">🪧</span><span class="opt-lbl">Sticker</span><span class="opt-sub">Die cut</span></button>
+      <button class="opt" onclick="selProd(this,'totebag')"><span class="opt-ico">🛍️</span><span class="opt-lbl">Tote Bag</span><span class="opt-sub">Bolsa</span></button>
+      <button class="opt" onclick="selProd(this,'candle')"><span class="opt-ico">🕯️</span><span class="opt-lbl">Vela</span><span class="opt-sub">Candle</span></button>
+    </div>
+  </div>
+
+  <!-- STEP 2: PLATFORM -->
+  <div class="card">
+    <div class="step-label"><div class="step-num sn2">2</div><div><div class="step-title">Plataforma de destino</div><div class="step-sub">¿Dónde vas a usar este mockup?</div></div></div>
+    <hr class="divider">
+    <div class="pill-row">
+      <button class="pill on" onclick="selPill(this,'platform','amazon')">Amazon KDP</button>
+      <button class="pill" onclick="selPill(this,'platform','etsy')">Etsy</button>
+      <button class="pill" onclick="selPill(this,'platform','instagram')">Instagram</button>
+      <button class="pill" onclick="selPill(this,'platform','tiktok')">TikTok</button>
+      <button class="pill" onclick="selPill(this,'platform','pinterest')">Pinterest</button>
+      <button class="pill" onclick="selPill(this,'platform','facebook')">Facebook Ads</button>
+      <button class="pill" onclick="selPill(this,'platform','web')">Página Web</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: PRODUCT DETAILS (dynamic) -->
+  <div class="card" id="step3">
+    <div class="step-label"><div class="step-num sn3">3</div><div><div class="step-title">Detalles del producto</div><div class="step-sub">Opciones específicas según tu producto</div></div></div>
+    <hr class="divider">
+
+    <!-- NOTEBOOK -->
+    <div class="dyn show" id="dyn-notebook">
+      <span class="mlbl">Tamaño del cuaderno</span>
+      <div class="g2" style="margin-bottom:0">
+        <button class="opt on" onclick="selGroup(this,'size','7.5 x 9.25 inches')"><span class="opt-ico">📓</span><span class="opt-lbl">Composition</span><span class="opt-sub">7.5 × 9.25 in</span></button>
+        <button class="opt" onclick="selGroup(this,'size','8.5 x 8.5 inches')"><span class="opt-ico">📒</span><span class="opt-lbl">Square</span><span class="opt-sub">8.5 × 8.5 in</span></button>
+        <button class="opt" onclick="selGroup(this,'size','custom')"><span class="opt-ico">✏️</span><span class="opt-lbl">Custom Size</span><span class="opt-sub">Tu medida</span></button>
+      </div>
+      <div id="cbox-notebook" class="cbox"><div class="crow"><div class="ig"><label>Ancho</label><input type="number" id="cw" placeholder="0.0" step="0.1" oninput="convertSize()"></div><div class="sep">×</div><div class="ig"><label>Alto</label><input type="number" id="ch" placeholder="0.0" step="0.1" oninput="convertSize()"></div><div class="ig" style="max-width:100px"><label>Unidad</label><div class="utog"><button class="ubtn on" id="btnIn" onclick="setUnit('in')">in</button><button class="ubtn" id="btnCm" onclick="setUnit('cm')">cm</button></div></div></div><div id="cres" class="cres"></div></div>
+    </div>
+
+    <!-- BOOK -->
+    <div class="dyn" id="dyn-book">
+      <span class="mlbl">Tamaño del libro</span>
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'size','6 x 9 inches')"><span class="opt-ico">📗</span><span class="opt-lbl">Standard Book</span><span class="opt-sub">6 × 9 in</span></button>
+        <button class="opt" onclick="selGroup(this,'size','8.5 x 11 inches')"><span class="opt-ico">📘</span><span class="opt-lbl">Large Book</span><span class="opt-sub">8.5 × 11 in</span></button>
+        <button class="opt" onclick="selGroup(this,'size','5 x 8 inches')"><span class="opt-ico">📙</span><span class="opt-lbl">Small Book</span><span class="opt-sub">5 × 8 in</span></button>
+        <button class="opt" onclick="selGroup(this,'size','custom')"><span class="opt-ico">✏️</span><span class="opt-lbl">Custom Size</span><span class="opt-sub">Tu medida</span></button>
+      </div>
+    </div>
+
+    <!-- TSHIRT -->
+    <div class="dyn" id="dyn-tshirt">
+      <span class="mlbl">Marca</span>
+      <div class="g4" style="margin-bottom:16px">
+        <button class="opt on" onclick="selGroup(this,'brand','Bella Canvas')"><span class="opt-ico">✨</span><span class="opt-lbl">Bella Canvas</span></button>
+        <button class="opt" onclick="selGroup(this,'brand','Comfort Colors')"><span class="opt-ico">🎨</span><span class="opt-lbl">Comfort Colors</span></button>
+        <button class="opt" onclick="selGroup(this,'brand','Gildan')"><span class="opt-ico">👕</span><span class="opt-lbl">Gildan</span></button>
+        <button class="opt" onclick="selGroup(this,'brand','Next Level')"><span class="opt-ico">⭐</span><span class="opt-lbl">Next Level</span></button>
+      </div>
+      <span class="mlbl">Color de la camiseta</span>
+      <div class="swatch-row">
+        <div><button class="swatch on" style="background:#fff;border-color:var(--dark)" onclick="selSwatch(this,'White')"></button><span class="swatch-label">Blanco</span></div>
+        <div><button class="swatch" style="background:#1a1a1a" onclick="selSwatch(this,'Black')"></button><span class="swatch-label">Negro</span></div>
+        <div><button class="swatch" style="background:#9ca3af" onclick="selSwatch(this,'Gray')"></button><span class="swatch-label">Gris</span></div>
+        <div><button class="swatch" style="background:#1e3a5f" onclick="selSwatch(this,'Navy Blue')"></button><span class="swatch-label">Marino</span></div>
+        <div><button class="swatch" style="background:#c0392b" onclick="selSwatch(this,'Red')"></button><span class="swatch-label">Rojo</span></div>
+      </div>
+    </div>
+
+    <!-- HOODIE -->
+    <div class="dyn" id="dyn-hoodie">
+      <span class="mlbl">Marca</span>
+      <div class="g4" style="margin-bottom:16px">
+        <button class="opt on" onclick="selGroup(this,'brand','Bella Canvas')"><span class="opt-ico">✨</span><span class="opt-lbl">Bella Canvas</span></button>
+        <button class="opt" onclick="selGroup(this,'brand','Comfort Colors')"><span class="opt-ico">🎨</span><span class="opt-lbl">Comfort Colors</span></button>
+        <button class="opt" onclick="selGroup(this,'brand','Gildan')"><span class="opt-ico">🧥</span><span class="opt-lbl">Gildan</span></button>
+        <button class="opt" onclick="selGroup(this,'brand','Next Level')"><span class="opt-ico">⭐</span><span class="opt-lbl">Next Level</span></button>
+      </div>
+      <span class="mlbl">Color del hoodie</span>
+      <div class="swatch-row">
+        <div><button class="swatch on" style="background:#fff;border-color:var(--dark)" onclick="selSwatch(this,'White')"></button><span class="swatch-label">Blanco</span></div>
+        <div><button class="swatch" style="background:#1a1a1a" onclick="selSwatch(this,'Black')"></button><span class="swatch-label">Negro</span></div>
+        <div><button class="swatch" style="background:#9ca3af" onclick="selSwatch(this,'Gray')"></button><span class="swatch-label">Gris</span></div>
+        <div><button class="swatch" style="background:#1e3a5f" onclick="selSwatch(this,'Navy Blue')"></button><span class="swatch-label">Marino</span></div>
+        <div><button class="swatch" style="background:#c0392b" onclick="selSwatch(this,'Red')"></button><span class="swatch-label">Rojo</span></div>
+      </div>
+    </div>
+
+    <!-- MUG -->
+    <div class="dyn" id="dyn-mug">
+      <span class="mlbl">Estilo de taza</span>
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'mugstyle','classic white ceramic mug')"><span class="opt-ico">☕</span><span class="opt-lbl">Blanca clásica</span><span class="opt-sub">Classic white</span></button>
+        <button class="opt" onclick="selGroup(this,'mugstyle','black interior ceramic mug')"><span class="opt-ico">🖤</span><span class="opt-lbl">Interior negro</span><span class="opt-sub">Black inside</span></button>
+        <button class="opt" onclick="selGroup(this,'mugstyle','color-changing magic mug')"><span class="opt-ico">✨</span><span class="opt-lbl">Mágica</span><span class="opt-sub">Color reveal</span></button>
+        <button class="opt" onclick="selGroup(this,'mugstyle','tall latte mug')"><span class="opt-ico">🥛</span><span class="opt-lbl">Tall / Latte</span><span class="opt-sub">Alto estilo café</span></button>
+      </div>
+    </div>
+
+    <!-- STICKER -->
+    <div class="dyn" id="dyn-sticker">
+      <span class="mlbl">Forma del sticker</span>
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'stickerform','die-cut sticker following the exact shape and border of the uploaded design')"><span class="opt-ico">✂️</span><span class="opt-lbl">Die Cut</span><span class="opt-sub">Respeta el borde</span></button>
+        <button class="opt" onclick="selGroup(this,'stickerform','circular round sticker')"><span class="opt-ico">⭕</span><span class="opt-lbl">Circular</span><span class="opt-sub">Round shape</span></button>
+        <button class="opt" onclick="selGroup(this,'stickerform','square sticker')"><span class="opt-ico">⬜</span><span class="opt-lbl">Cuadrado</span><span class="opt-sub">Square shape</span></button>
+      </div>
+    </div>
+
+    <!-- TOTE BAG -->
+    <div class="dyn" id="dyn-totebag">
+      <span class="mlbl">Color de la bolsa</span>
+      <div class="swatch-row">
+        <div><button class="swatch on" style="background:#f5f0e8;border-color:var(--dark)" onclick="selSwatch(this,'natural canvas')"></button><span class="swatch-label">Natural</span></div>
+        <div><button class="swatch" style="background:#fff" onclick="selSwatch(this,'white')"></button><span class="swatch-label">Blanco</span></div>
+        <div><button class="swatch" style="background:#1a1a1a" onclick="selSwatch(this,'black')"></button><span class="swatch-label">Negro</span></div>
+      </div>
+    </div>
+
+    <!-- CANDLE -->
+    <div class="dyn" id="dyn-candle">
+      <span class="mlbl">Tipo de vela</span>
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'candletype','glass jar candle with label')"><span class="opt-ico">🕯️</span><span class="opt-lbl">Frasco vidrio</span><span class="opt-sub">Glass jar</span></button>
+        <button class="opt" onclick="selGroup(this,'candletype','tin candle with label')"><span class="opt-ico">🫙</span><span class="opt-lbl">Lata / Tin</span><span class="opt-sub">Tin container</span></button>
+        <button class="opt" onclick="selGroup(this,'candletype','pillar candle with wrap label')"><span class="opt-ico">🏛️</span><span class="opt-lbl">Pilar / Pillar</span><span class="opt-sub">Wrap label</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: SCENE -->
+  <div class="card" id="step4">
+    <div class="step-label"><div class="step-num sn4">4</div><div><div class="step-title">Escena / Ambiente</div><div class="step-sub">¿Dónde se encuentra el producto?</div></div></div>
+    <hr class="divider">
+
+    <div class="dyn show" id="scene-notebook">
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'scene','a warm boho living room with natural plants, macrame wall decor and soft window light')"><span class="opt-ico">🪴</span><span class="opt-lbl">Boho Room</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a light oak wood table with warm natural daylight from the side')"><span class="opt-ico">🪵</span><span class="opt-lbl">Mesa madera</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a clean white marble flat surface with minimal studio lighting')"><span class="opt-ico">🤍</span><span class="opt-lbl">Marble flat lay</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','an outdoor garden setting with green bokeh background and natural sunlight')"><span class="opt-ico">🌿</span><span class="opt-lbl">Outdoor jardín</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a school desk with soft pencils and small decorative elements around')"><span class="opt-ico">🖊️</span><span class="opt-lbl">Escritorio</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a cozy bed with white linen pillows and a soft blanket')"><span class="opt-ico">🛏️</span><span class="opt-lbl">Cama acogedora</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="scene-book">
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'scene','a warm boho living room with natural plants and soft window light')"><span class="opt-ico">🪴</span><span class="opt-lbl">Boho Room</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a cozy reading nook with warm lamp light and soft cushions')"><span class="opt-ico">📖</span><span class="opt-lbl">Reading nook</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a clean white marble flat surface with minimal studio lighting')"><span class="opt-ico">🤍</span><span class="opt-lbl">Marble flat lay</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a wooden bookshelf with warm ambient lighting')"><span class="opt-ico">📚</span><span class="opt-lbl">Librería</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a coffee shop table with warm cafe ambiance')"><span class="opt-ico">☕</span><span class="opt-lbl">Café / Coffee shop</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','an outdoor bench in a sunny park')"><span class="opt-ico">🌳</span><span class="opt-lbl">Outdoor parque</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="scene-tshirt">
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'scene','a modern urban street background with natural light')"><span class="opt-ico">🏙️</span><span class="opt-lbl">Urban street</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a clean white studio background with professional lighting')"><span class="opt-ico">🤍</span><span class="opt-lbl">Studio blanco</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','an outdoor sunny park with green blurred background')"><span class="opt-ico">🌳</span><span class="opt-lbl">Outdoor parque</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a cozy boho bedroom with mirror and plants')"><span class="opt-ico">🪴</span><span class="opt-lbl">Boho bedroom</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a bright and airy minimalist room with white walls')"><span class="opt-ico">✨</span><span class="opt-lbl">Minimalist room</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a coffee shop background with warm ambient light')"><span class="opt-ico">☕</span><span class="opt-lbl">Coffee shop</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="scene-hoodie">
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'scene','a modern urban street background with natural light')"><span class="opt-ico">🏙️</span><span class="opt-lbl">Urban street</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','an autumn park with warm golden foliage background')"><span class="opt-ico">🍂</span><span class="opt-lbl">Autumn park</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a clean white studio background with professional lighting')"><span class="opt-ico">🤍</span><span class="opt-lbl">Studio blanco</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a cozy indoor setting with warm lighting and brick wall')"><span class="opt-ico">🧱</span><span class="opt-lbl">Brick wall indoor</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a coffee shop with warm winter ambiance')"><span class="opt-ico">☕</span><span class="opt-lbl">Coffee shop</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','an outdoor mountain or forest path with natural light')"><span class="opt-ico">🏔️</span><span class="opt-lbl">Outdoor montaña</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="scene-mug">
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'scene','a cozy coffee shop with warm ambient lighting, wooden table, soft bokeh background')"><span class="opt-ico">☕</span><span class="opt-lbl">Cafetería acogedora</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a kitchen table with a fresh croissant and morning newspaper beside the mug')"><span class="opt-ico">🥐</span><span class="opt-lbl">Mesa con croissant</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a window sill with rain drops on the glass and soft grey light outside')"><span class="opt-ico">🌧️</span><span class="opt-lbl">Ventana con lluvia</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a home office desk with laptop, notebook and morning light')"><span class="opt-ico">💻</span><span class="opt-lbl">Home office</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','a white marble kitchen counter with minimal elegant styling')"><span class="opt-ico">🤍</span><span class="opt-lbl">Marble kitchen</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','an outdoor patio table with garden blurred background and morning light')"><span class="opt-ico">🌸</span><span class="opt-lbl">Outdoor patio</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="scene-sticker">
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'scene','stuck on a laptop lid on a desk with soft ambient light')"><span class="opt-ico">💻</span><span class="opt-lbl">Laptop</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','being held between fingers close-up with blurred colorful background')"><span class="opt-ico">🤌</span><span class="opt-lbl">Manos sosteniendo</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','stuck on a water bottle or tumbler on a white marble surface')"><span class="opt-ico">💧</span><span class="opt-lbl">Botella / Tumbler</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','flat lay on a white marble surface with small decorative props')"><span class="opt-ico">🤍</span><span class="opt-lbl">Flat lay marble</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','placed on an open journal or planner on a wooden desk')"><span class="opt-ico">📓</span><span class="opt-lbl">Journal / Planner</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','on a colorful fun background with confetti and small props')"><span class="opt-ico">🎉</span><span class="opt-lbl">Fun background</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="scene-totebag">
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'scene','being carried on the shoulder of a person in an urban street setting')"><span class="opt-ico">🏙️</span><span class="opt-lbl">Urban street</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','hanging on a white wall hook with soft natural light')"><span class="opt-ico">🤍</span><span class="opt-lbl">Wall hook</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','flat lay on a white marble surface with flowers and small props')"><span class="opt-ico">🌸</span><span class="opt-lbl">Flat lay</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','in a farmers market or outdoor setting with warm light')"><span class="opt-ico">🌿</span><span class="opt-lbl">Farmers market</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="scene-candle">
+      <div class="g3">
+        <button class="opt on" onclick="selGroup(this,'scene','on a bathroom vanity with eucalyptus leaves and soft warm light')"><span class="opt-ico">🛁</span><span class="opt-lbl">Baño / Vanity</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','on a wooden coffee table with warm candle glow and cozy blanket')"><span class="opt-ico">🕯️</span><span class="opt-lbl">Living room cozy</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','flat lay on marble with dried flowers and matching props')"><span class="opt-ico">🌸</span><span class="opt-lbl">Flat lay marble</span></button>
+        <button class="opt" onclick="selGroup(this,'scene','on a bedroom nightstand with soft lamp light')"><span class="opt-ico">🛏️</span><span class="opt-lbl">Nightstand</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: ACTION -->
+  <div class="card">
+    <div class="step-label"><div class="step-num sn5">5</div><div><div class="step-title">Acción</div><div class="step-sub">¿Qué está pasando en la escena?</div></div></div>
+    <hr class="divider">
+    <div class="dyn show" id="action-notebook">
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'action','holding the product up with both hands at chest level displaying the front cover clearly')"><span class="opt-ico">🤲</span><span class="opt-lbl">Sosteniendo</span><span class="opt-sub">Showing cover</span></button>
+        <button class="opt" onclick="selGroup(this,'action','actively writing or drawing on an open page of the product with a pencil, cover visible beside it')"><span class="opt-ico">✏️</span><span class="opt-lbl">Escribiendo</span><span class="opt-sub">Writing inside</span></button>
+        <button class="opt" onclick="selGroup(this,'action','looking at the open product with a focused and curious expression, cover visible')"><span class="opt-ico">👀</span><span class="opt-lbl">Mirando / Leyendo</span><span class="opt-sub">Reading</span></button>
+        <button class="opt" onclick="selGroup(this,'action','product placed flat face-up in the center of the scene, top-down view')"><span class="opt-ico">📸</span><span class="opt-lbl">Flat lay</span><span class="opt-sub">Top-down shot</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="action-book">
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'action','holding the book up with both hands showing the front cover clearly')"><span class="opt-ico">🤲</span><span class="opt-lbl">Sosteniendo</span></button>
+        <button class="opt" onclick="selGroup(this,'action','reading the open book with an engaged expression, cover visible')"><span class="opt-ico">📖</span><span class="opt-lbl">Leyendo</span></button>
+        <button class="opt" onclick="selGroup(this,'action','book placed flat face-up top-down view with props around it')"><span class="opt-ico">📸</span><span class="opt-lbl">Flat lay</span></button>
+        <button class="opt" onclick="selGroup(this,'action','close-up detail shot of the book cover with shallow depth of field')"><span class="opt-ico">🔍</span><span class="opt-lbl">Close-up portada</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="action-tshirt">
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'action','posing facing the camera directly showing the front design clearly')"><span class="opt-ico">🧍</span><span class="opt-lbl">Posando de frente</span></button>
+        <button class="opt" onclick="selGroup(this,'action','posing at a slight angle showing the shirt and design naturally')"><span class="opt-ico">🚶</span><span class="opt-lbl">Posando de lado</span></button>
+        <button class="opt" onclick="selGroup(this,'action','looking directly at the camera with a natural confident smile')"><span class="opt-ico">😊</span><span class="opt-lbl">Mirando cámara</span></button>
+        <button class="opt" onclick="selGroup(this,'action','close-up shot focused on the shirt design, cropped to chest area')"><span class="opt-ico">🔍</span><span class="opt-lbl">Close-up diseño</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="action-hoodie">
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'action','posing facing the camera directly showing the front design clearly, hands in pockets')"><span class="opt-ico">🧍</span><span class="opt-lbl">Posando de frente</span></button>
+        <button class="opt" onclick="selGroup(this,'action','posing at a slight angle showing the hoodie naturally')"><span class="opt-ico">🚶</span><span class="opt-lbl">Posando de lado</span></button>
+        <button class="opt" onclick="selGroup(this,'action','looking directly at the camera with a relaxed natural expression')"><span class="opt-ico">😊</span><span class="opt-lbl">Mirando cámara</span></button>
+        <button class="opt" onclick="selGroup(this,'action','close-up shot focused on the hoodie design, cropped to chest area')"><span class="opt-ico">🔍</span><span class="opt-lbl">Close-up diseño</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="action-mug">
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'action','holding the mug with both hands warmly, steam rising from the top')"><span class="opt-ico">🤲</span><span class="opt-lbl">Sosteniendo</span><span class="opt-sub">Both hands, steam</span></button>
+        <button class="opt" onclick="selGroup(this,'action','taking a sip from the mug with eyes closed in enjoyment')"><span class="opt-ico">😌</span><span class="opt-lbl">Tomando café</span></button>
+        <button class="opt" onclick="selGroup(this,'action','mug placed on surface top-down flat lay view showing design')"><span class="opt-ico">📸</span><span class="opt-lbl">Flat lay arriba</span></button>
+        <button class="opt" onclick="selGroup(this,'action','close-up of the mug side showing the design clearly, shallow depth of field')"><span class="opt-ico">🔍</span><span class="opt-lbl">Close-up diseño</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="action-sticker">
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'action','being held between two fingers close-up showing the design clearly')"><span class="opt-ico">🤌</span><span class="opt-lbl">Manos sosteniendo</span></button>
+        <button class="opt" onclick="selGroup(this,'action','being peeled and placed on a surface, action shot')"><span class="opt-ico">🏷️</span><span class="opt-lbl">Pegando sticker</span></button>
+        <button class="opt" onclick="selGroup(this,'action','flat lay top-down view of the sticker on a surface')"><span class="opt-ico">📸</span><span class="opt-lbl">Flat lay</span></button>
+        <button class="opt" onclick="selGroup(this,'action','close-up macro shot of the sticker showing texture and detail')"><span class="opt-ico">🔍</span><span class="opt-lbl">Close-up macro</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="action-totebag">
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'action','carried over the shoulder naturally')"><span class="opt-ico">👜</span><span class="opt-lbl">Al hombro</span></button>
+        <button class="opt" onclick="selGroup(this,'action','held in the hand at the side showing the design')"><span class="opt-ico">🤚</span><span class="opt-lbl">En la mano</span></button>
+        <button class="opt" onclick="selGroup(this,'action','flat lay top-down view showing design clearly')"><span class="opt-ico">📸</span><span class="opt-lbl">Flat lay</span></button>
+      </div>
+    </div>
+    <div class="dyn" id="action-candle">
+      <div class="g2">
+        <button class="opt on" onclick="selGroup(this,'action','placed on surface lit with flame glowing, label facing camera')"><span class="opt-ico">🕯️</span><span class="opt-lbl">Encendida</span><span class="opt-sub">Lit with flame</span></button>
+        <button class="opt" onclick="selGroup(this,'action','held in both hands showing the label clearly')"><span class="opt-ico">🤲</span><span class="opt-lbl">Sosteniendo</span></button>
+        <button class="opt" onclick="selGroup(this,'action','flat lay top-down view surrounded by matching props')"><span class="opt-ico">📸</span><span class="opt-lbl">Flat lay</span></button>
+        <button class="opt" onclick="selGroup(this,'action','close-up of the label with candle glow bokeh background')"><span class="opt-ico">🔍</span><span class="opt-lbl">Close-up label</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 6: CHARACTER -->
+  <div class="card">
+    <div class="step-label"><div class="step-num sn6">6</div><div><div class="step-title">Personaje</div><div class="step-sub">¿Quién aparece? (aplica para todos los productos)</div></div></div>
+    <hr class="divider">
+
+    <span class="mlbl">Tipo de personaje</span>
+    <div class="g4" style="margin-bottom:18px" id="charGrid">
+      <button class="opt on" onclick="selChar(this,'hands')"><span class="opt-ico">🙌</span><span class="opt-lbl">Solo manos</span><span class="opt-sub">Funciona en Gemini</span></button>
+      <button class="opt" onclick="selChar(this,'girl')"><span class="opt-ico">👧</span><span class="opt-lbl">Niña</span><span class="opt-sub">Girl 5-8 yrs</span></button>
+      <button class="opt" onclick="selChar(this,'boy')"><span class="opt-ico">👦</span><span class="opt-lbl">Niño</span><span class="opt-sub">Boy 5-8 yrs</span></button>
+      <button class="opt" onclick="selChar(this,'teen-girl')"><span class="opt-ico">🧒</span><span class="opt-lbl">Jovencita</span><span class="opt-sub">Teen girl 13-17</span></button>
+      <button class="opt" onclick="selChar(this,'teen-boy')"><span class="opt-ico">👱</span><span class="opt-lbl">Joven</span><span class="opt-sub">Teen boy 13-17</span></button>
+      <button class="opt" onclick="selChar(this,'woman')"><span class="opt-ico">👩</span><span class="opt-lbl">Mujer</span><span class="opt-sub">Adult woman</span></button>
+      <button class="opt" onclick="selChar(this,'man')"><span class="opt-ico">👨</span><span class="opt-lbl">Hombre</span><span class="opt-sub">Adult man</span></button>
+    </div>
+
+    <div id="ethnicitySection" style="display:none">
+      <span class="mlbl">Etnia / Rasgos</span>
+      <div class="g4" style="margin-bottom:16px" id="ethnicGrid">
+        <button class="opt on" onclick="selGroup(this,'ethnicity','Latina')"><span class="opt-ico">🌺</span><span class="opt-lbl">Latina</span></button>
+        <button class="opt" onclick="selGroup(this,'ethnicity','blonde European')"><span class="opt-ico">👱‍♀️</span><span class="opt-lbl">Rubia / Europea</span></button>
+        <button class="opt" onclick="selGroup(this,'ethnicity','Asian')"><span class="opt-ico">🌸</span><span class="opt-lbl">Asiática</span></button>
+        <button class="opt" onclick="selGroup(this,'ethnicity','African American')"><span class="opt-ico">✊</span><span class="opt-lbl">Afroamericana</span></button>
+        <button class="opt" onclick="selGroup(this,'ethnicity','Middle Eastern Mediterranean')"><span class="opt-ico">🌙</span><span class="opt-lbl">Árabe / Med.</span></button>
+        <button class="opt" onclick="selGroup(this,'ethnicity','redhead')"><span class="opt-ico">🦰</span><span class="opt-lbl">Pelirroja</span></button>
+        <button class="opt" onclick="selGroup(this,'ethnicity','Russian Eastern European')"><span class="opt-ico">❄️</span><span class="opt-lbl">Rusa / Eslava</span></button>
+        <button class="opt" onclick="selGroup(this,'ethnicity','South Asian Indian')"><span class="opt-ico">🪷</span><span class="opt-lbl">Sur Asiática</span></button>
+      </div>
+
+      <span class="mlbl">Tono de piel</span>
+      <div class="skin-row">
+        <div><button class="skin on" style="background:#FDDBB4" onclick="selSkin(this,'light skin tone')" title="Claro"></button></div>
+        <div><button class="skin" style="background:#E8B88A" onclick="selSkin(this,'medium-light skin tone')" title="Medio claro"></button></div>
+        <div><button class="skin" style="background:#C68642" onclick="selSkin(this,'medium olive skin tone')" title="Medio"></button></div>
+        <div><button class="skin" style="background:#8D5524" onclick="selSkin(this,'medium-dark skin tone')" title="Medio oscuro"></button></div>
+        <div><button class="skin" style="background:#4A2912" onclick="selSkin(this,'dark skin tone')" title="Oscuro"></button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 7: PALETTE -->
+  <div class="card">
+    <div class="step-label"><div class="step-num sn7">7</div><div><div class="step-title">Paleta del ambiente</div><div class="step-sub">Colores del fondo y decoración de la escena</div></div></div>
+    <hr class="divider">
+    <div class="g2">
+      <button class="opt on" onclick="selGroup(this,'palette','background colors and props should subtly complement and harmonize with the product colors')"><span class="opt-ico">🎯</span><span class="opt-lbl">Match producto</span><span class="opt-sub">Colors complement design</span></button>
+      <button class="opt" onclick="selGroup(this,'palette','bold vibrant saturated colors, energetic and eye-catching')"><span class="opt-ico">🌈</span><span class="opt-lbl">Vibrante</span><span class="opt-sub">Bold saturated</span></button>
+      <button class="opt" onclick="selGroup(this,'palette','soft pastel tones, gentle pinks, lavenders, mint and cream')"><span class="opt-ico">🌸</span><span class="opt-lbl">Pastel suave</span><span class="opt-sub">Soft pastels</span></button>
+      <button class="opt" onclick="selGroup(this,'palette','neutral clean tones, white beige and light gray, minimal and elegant')"><span class="opt-ico">🤍</span><span class="opt-lbl">Neutro / Limpio</span><span class="opt-sub">White, beige, minimal</span></button>
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="gen-wrap">
+    <button class="gen-btn" onclick="generate()">
+      <span>✦ Generar 3 Prompts</span>
+    </button>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <div class="res-hdr">
+      <h2>Tus Prompts Listos ✦</h2>
+      <p>Sube tu imagen del producto y pega el prompt en la plataforma que prefieras</p>
+    </div>
+
+    <div class="pcard pc-g">
+      <div class="pbadge bg-t">✦ Gemini</div>
+      <div class="ptitle">Para Google Gemini</div>
+      <div class="pdesc">Sin menores — sube tu imagen + este prompt</div>
+      <div class="ptext" id="pt-gemini"></div>
+      <button class="cpbtn cp-t" onclick="cp('pt-gemini',this)">📋 Copiar prompt</button>
+    </div>
+
+    <div class="pcard pc-gr">
+      <div class="pbadge bg-c">✦ Grok / ChatGPT</div>
+      <div class="ptitle">Para Grok & ChatGPT GPT-4o</div>
+      <div class="pdesc">Sube tu imagen + este prompt</div>
+      <div class="ptext" id="pt-grok"></div>
+      <button class="cpbtn cp-c" onclick="cp('pt-grok',this)">📋 Copiar prompt</button>
+    </div>
+
+    <div class="pcard pc-mj">
+      <div class="pbadge bg-y">✦ Midjourney</div>
+      <div class="ptitle">Para Midjourney</div>
+      <div class="pdesc">Agrega --cref [url de tu imagen] al final</div>
+      <div class="ptext" id="pt-mj"></div>
+      <button class="cpbtn cp-y" onclick="cp('pt-mj',this)">📋 Copiar prompt</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-name">Mockup Prompt Generator ✦ Johanna Digital Seattle</div>
+    <div class="footer-follow">Follow us</div>
+    <div class="footer-socials">
+      <a href="https://www.tiktok.com/@johannadigitalseattle" target="_blank" class="fsoc">TikTok</a>
+      <a href="https://www.pinterest.com/johannadigitalseattle" target="_blank" class="fsoc">Pinterest</a>
+    </div>
+    <div class="footer-legal">
+      © 2025 Johanna Digital Seattle · All rights reserved · Not for resale or redistribution ·
+      <a href="https://johadigitalseattle.com" target="_blank">johadigitalseattle.com</a>
+    </div>
+  </div>
+</div>
+
+<script>
+var S = {
+  product:'notebook', platform:'amazon',
+  size:'7.5 x 9.25 inches', brand:'Bella Canvas', shirtColor:'White',
+  mugstyle:'classic white ceramic mug', stickerform:'die-cut sticker following the exact shape and border of the uploaded design',
+  candletype:'glass jar candle with label',
+  scene:'a warm boho living room with natural plants, macrame wall decor and soft window light',
+  action:'holding the product up with both hands at chest level displaying the front cover clearly',
+  char:'hands', ethnicity:'Latina', skin:'light skin tone',
+  palette:'background colors and props should subtly complement and harmonize with the product colors',
+  unit:'in', customW:'', customH:''
+};
+
+var PROD_LABELS = {
+  notebook:'composition notebook',book:'book',tshirt:'t-shirt',hoodie:'hoodie',
+  mug:'mug',sticker:'sticker',totebag:'tote bag',candle:'candle'
+};
+
+function selProd(btn, val) {
+  btn.closest('.g4').querySelectorAll('.opt').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  S.product = val;
+  // hide all dyn sections
+  document.querySelectorAll('.dyn').forEach(function(d){d.classList.remove('show')});
+  // show relevant ones
+  var dyn = document.getElementById('dyn-'+val);
+  if(dyn) dyn.classList.add('show');
+  var sc = document.getElementById('scene-'+val);
+  if(sc) sc.classList.add('show'); else { var sf = document.getElementById('scene-notebook'); if(sf) sf.classList.add('show'); }
+  var ac = document.getElementById('action-'+val);
+  if(ac) ac.classList.add('show'); else { var af = document.getElementById('action-notebook'); if(af) af.classList.add('show'); }
+  // reset scene/action to first option
+  ['scene-'+val,'action-'+val].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el){
+      var btns = el.querySelectorAll('.opt');
+      btns.forEach(function(b){b.classList.remove('on')});
+      if(btns[0]){btns[0].classList.add('on'); btns[0].click();}
+    }
+  });
+}
+
+function selPill(btn, group, val) {
+  btn.closest('.pill-row').querySelectorAll('.pill').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  S[group] = val;
+}
+
+function selGroup(btn, key, val) {
+  var parent = btn.parentElement;
+  parent.querySelectorAll('.opt').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  S[key] = val;
+  if(key==='size' && val==='custom'){
+    var nb = document.getElementById('cbox-notebook');
+    if(nb) nb.classList.add('show');
+  } else if(key==='size'){
+    var nb2 = document.getElementById('cbox-notebook');
+    if(nb2) nb2.classList.remove('show');
+  }
+}
+
+function selSwatch(btn, color) {
+  btn.closest('.swatch-row').querySelectorAll('.swatch').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  S.shirtColor = color;
+}
+
+function selChar(btn, val) {
+  btn.closest('.g4').querySelectorAll('.opt').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  S.char = val;
+  var es = document.getElementById('ethnicitySection');
+  es.style.display = (val === 'hands') ? 'none' : 'block';
+}
+
+function selSkin(btn, val) {
+  btn.closest('.skin-row').querySelectorAll('.skin').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  S.skin = val;
+}
+
+function setUnit(u) {
+  S.unit = u;
+  document.getElementById('btnIn').classList.toggle('on', u==='in');
+  document.getElementById('btnCm').classList.toggle('on', u==='cm');
+  convertSize();
+}
+
+function convertSize() {
+  var w = parseFloat(document.getElementById('cw').value);
+  var h = parseFloat(document.getElementById('ch').value);
+  var res = document.getElementById('cres');
+  if(!w||!h){res.classList.remove('show');return;}
+  if(S.unit==='cm'){
+    S.customW=(w/2.54).toFixed(2); S.customH=(h/2.54).toFixed(2);
+    res.textContent='✓ En pulgadas: '+S.customW+' × '+S.customH+' inches';
+  } else {
+    S.customW=w.toFixed(2); S.customH=h.toFixed(2);
+    res.textContent='✓ Tamaño: '+S.customW+' × '+S.customH+' inches';
+  }
+  res.classList.add('show');
+  S.size = S.customW+' x '+S.customH+' inches';
+}
+
+function getProductDetail() {
+  var p = S.product;
+  if(p==='notebook'||p==='book') return 'The product is a '+PROD_LABELS[p]+' measuring '+S.size+' — real-life size, do NOT make it look oversized or like a poster.';
+  if(p==='tshirt') return 'The product is a '+S.shirtColor+' '+S.brand+' t-shirt.';
+  if(p==='hoodie') return 'The product is a '+S.shirtColor+' '+S.brand+' hoodie.';
+  if(p==='mug') return 'The product is a '+S.mugstyle+'.';
+  if(p==='sticker') return 'The product is a '+S.stickerform+'.';
+  if(p==='totebag') return 'The product is a '+S.shirtColor+' tote bag.';
+  if(p==='candle') return 'The product is a '+S.candletype+'.';
+  return 'The product is a '+PROD_LABELS[p]+'.';
+}
+
+function getCharDesc() {
+  if(S.char==='hands') return 'A pair of hands';
+  var ages = {girl:'5 to 8 year old',boy:'5 to 8 year old','teen-girl':'13 to 17 year old','teen-boy':'13 to 17 year old',woman:'adult',man:'adult'};
+  var genders = {girl:'girl',boy:'boy','teen-girl':'girl','teen-boy':'boy',woman:'woman',man:'man'};
+  return 'A '+ages[S.char]+' '+S.ethnicity+' '+genders[S.char]+' with '+S.skin;
+}
+
+var CRITICAL = 'CRITICAL: Use the uploaded reference image as the exact product cover/design. Do NOT redesign, recolor, reinterpret, simplify or modify it in any way. Reproduce it exactly as uploaded. Preserve original artwork 100%.';
+
+function generate() {
+  var prodDetail = getProductDetail();
+  var charDesc = getCharDesc();
+  var scene = S.scene;
+  var action = S.action;
+  var palette = S.palette;
+
+  // GEMINI - no minors
+  var geminiChar = (S.char==='girl'||S.char==='boy') ? 'A pair of hands' : charDesc;
+  var geminiPrompt =
+    'Hyper-realistic professional product photography.\n'+
+    geminiChar+' '+action+'.\n\n'+
+    'Setting: '+scene+'.\n'+
+    prodDetail+'\n'+
+    'Scene colors: '+palette+'.\n\n'+
+    'Camera: 85mm lens, shallow depth of field, soft natural light, DSLR quality, 8K resolution.\n\n'+
+    CRITICAL;
+
+  // GROK / CHATGPT
+  var grokPrompt =
+    'Hyper-realistic professional product photography.\n'+
+    charDesc+' '+action+'.\n\n'+
+    'Setting: '+scene+'.\n'+
+    prodDetail+'\n'+
+    'Scene colors: '+palette+'.\n\n'+
+    'Camera: 85mm lens, shallow depth of field, cinematic natural light, DSLR professional photography, 8K resolution, ultra-detailed textures.\n\n'+
+    CRITICAL;
+
+  // MIDJOURNEY
+  var mjPrompt =
+    'Hyper-realistic product photography, '+
+    charDesc+' '+action+', '+
+    scene+', '+
+    prodDetail.replace(/\n/g,' ')+', '+
+    palette+', '+
+    '85mm lens, shallow depth of field, cinematic lighting, DSLR, 8K, photorealistic --v 6.1 --ar 4:5 --q 2\n\n'+
+    '⚠️ Agrega al final: --cref [URL de tu imagen de producto]';
+
+  document.getElementById('pt-gemini').textContent = geminiPrompt;
+  document.getElementById('pt-grok').textContent = grokPrompt;
+  document.getElementById('pt-mj').textContent = mjPrompt;
+
+  var r = document.getElementById('results');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function cp(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(function(){
+    var orig = btn.innerHTML;
+    btn.innerHTML = '✓ ¡Copiado!';
+    setTimeout(function(){btn.innerHTML=orig;},2000);
+  });
+}
+</script>
+</body>
+</html>
