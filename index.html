@@ -246,6 +246,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;o
 
     <!-- NOTEBOOK -->
     <div class="dyn show" id="dyn-notebook">
+      <span class="mlbl" data-t="nbBinding">Binding type</span>
+      <div class="g2" style="margin-bottom:16px">
+        <button class="opt on" onclick="selNbBinding(this,'kdp')"><span class="opt-ico">📚</span><span class="opt-lbl" data-t="bindKdp">KDP / Perfect Bound</span><span class="opt-sub" data-t="bindKdpSub">Flat spine — Amazon KDP ✓</span></button>
+        <button class="opt" onclick="selNbBinding(this,'spiral')"><span class="opt-ico">🌀</span><span class="opt-lbl" data-t="bindSpiral">Spiral / Wire-O</span><span class="opt-sub" data-t="bindSpiralSub">Metal spiral binding</span></button>
+      </div>
       <span class="mlbl" data-t="nbSize">Notebook size</span>
       <div class="g2">
         <button class="opt on" onclick="selGroup(this,'size','7.5 x 9.25 inches')"><span class="opt-ico">📓</span><span class="opt-lbl">Composition</span><span class="opt-sub">7.5 × 9.25 in</span></button>
@@ -578,11 +583,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;o
     <div class="step-label"><div class="step-num sn5">5</div><div><div class="step-title" data-t="s5title">Action</div><div class="step-sub" data-t="s5sub">What is happening in the scene?</div></div></div>
     <hr class="divider">
     <div class="dyn show" id="action-notebook"><div class="g2">
-      <button class="opt on" onclick="selGroup(this,'action','holding the product up with both hands at chest level displaying the front cover clearly')"><span class="opt-ico">🤲</span><span class="opt-lbl" data-t="acHolding">Holding</span><span class="opt-sub" data-t="acHoldingSub">Showing cover</span></button>
-      <button class="opt" onclick="selGroup(this,'action','actively writing or drawing on an open page of the product with a pencil, cover visible beside it')"><span class="opt-ico">✏️</span><span class="opt-lbl" data-t="acWriting">Writing</span><span class="opt-sub" data-t="acWritingSub">Writing inside</span></button>
-      <button class="opt" onclick="selGroup(this,'action','looking at the open product with a focused and curious expression, cover visible')"><span class="opt-ico">👀</span><span class="opt-lbl" data-t="acReading">Reading</span></button>
-      <button class="opt" onclick="selGroup(this,'action','product placed flat face-up in the center of the scene, top-down view')"><span class="opt-ico">📸</span><span class="opt-lbl" data-t="acFlatlay">Flat Lay</span><span class="opt-sub">Top-down</span></button>
-    </div></div>
+      <button class="opt on" onclick="selGroup(this,'action','holding the product up with both hands at chest level displaying the front cover clearly');hideInterior()"><span class="opt-ico">🤲</span><span class="opt-lbl" data-t="acHolding">Holding</span><span class="opt-sub" data-t="acHoldingSub">Showing cover</span></button>
+      <button class="opt" onclick="selGroup(this,'action','writing');showInterior()"><span class="opt-ico">✏️</span><span class="opt-lbl" data-t="acWriting">Writing</span><span class="opt-sub" data-t="acWritingSub">Writing inside</span></button>
+      <button class="opt" onclick="selGroup(this,'action','looking at the open product with a focused and curious expression, cover visible');hideInterior()"><span class="opt-ico">👀</span><span class="opt-lbl" data-t="acReading">Reading</span></button>
+      <button class="opt" onclick="selGroup(this,'action','product placed flat face-up in the center of the scene, top-down view');hideInterior()"><span class="opt-ico">📸</span><span class="opt-lbl" data-t="acFlatlay">Flat Lay</span><span class="opt-sub">Top-down</span></button>
+    </div>
+    <!-- INTERIOR PAGE DROPDOWN — only when Writing selected -->
+    <div id="interior-page-box" style="display:none;margin-top:16px;padding:16px;background:var(--purple-light);border-radius:14px;border:1.5px solid var(--purple-mid)">
+      <span class="mlbl" data-t="interiorType">Interior page type</span>
+      <div class="g2" style="margin-bottom:0">
+        <button class="opt on" onclick="selInterior(this,'grid')"><span class="opt-ico">📐</span><span class="opt-lbl" data-t="intGrid">Cuadriculada</span><span class="opt-sub">Grid paper</span></button>
+        <button class="opt" onclick="selInterior(this,'lined-bw')"><span class="opt-ico">📝</span><span class="opt-lbl" data-t="intLinedBW">Lineal B&N</span><span class="opt-sub">Amazon standard</span></button>
+        <button class="opt" onclick="selInterior(this,'lined-blue')"><span class="opt-ico">🔵</span><span class="opt-lbl" data-t="intLinedBlue">Lineal azul</span><span class="opt-sub">Blue ruled lines</span></button>
+        <button class="opt" onclick="selInterior(this,'calligraphy')"><span class="opt-ico">✍️</span><span class="opt-lbl" data-t="intCallig">Caligrafía</span><span class="opt-sub">Lettering guides</span></button>
+        <button class="opt" onclick="selInterior(this,'custom')"><span class="opt-ico">🎨</span><span class="opt-lbl" data-t="intCustom">Custom</span><span class="opt-sub" data-t="intCustomSub">Mi propio diseño</span></button>
+      </div>
+      <!-- Custom notice — only for custom -->
+      <div id="interior-custom-notice" style="display:none;margin-top:12px;padding:12px 14px;background:#fff;border-radius:10px;border:1.5px solid #EC4899;font-size:13px;line-height:1.7;color:#1a1a1a">
+        <strong style="color:#EC4899" data-t="customNoticeTitle">📎 Instrucciones para Custom:</strong><br>
+        <span data-t="customNoticeText">Sube 2 imágenes a la IA — <strong>Image A = portada</strong>, <strong>Image B = página interior</strong>.<br>Se generan 2 prompts especiales: uno para Gemini ✅ y uno para ChatGPT.</span>
+      </div>
+    </div>
+    </div>
     <div class="dyn" id="action-book"><div class="g2">
       <button class="opt on" onclick="selGroup(this,'action','holding the book up with both hands showing the front cover clearly')"><span class="opt-ico">🤲</span><span class="opt-lbl" data-t="acHolding">Holding</span></button>
       <button class="opt" onclick="selGroup(this,'action','reading the open book with an engaged expression, cover visible')"><span class="opt-ico">📖</span><span class="opt-lbl" data-t="acReading">Reading</span></button>
@@ -817,6 +839,9 @@ var T = {
     pwSub:'Johanna Digital Seattle<br>Exclusive tool — private access',pwLbl:'Access key',pwBtn:'✦ Enter',pwErr:'❌ Incorrect key. Please try again.',pwFollowUs:'Follow us',
     mjNote:'⚠️ Add at the end: --cref [URL of your product image]',
     bundleAlert:'⚠️ Please select at least one product for the bundle.',
+    nbBinding:'Binding type',bindKdp:'KDP / Perfect Bound',bindKdpSub:'Flat spine — Amazon KDP ✓',bindSpiral:'Spiral / Wire-O',bindSpiralSub:'Metal spiral binding',
+    interiorType:'Interior page type',intGrid:'Grid paper',intLinedBW:'Lined B&W',intLinedBlue:'Lined blue',intCallig:'Calligraphy',intCustom:'Custom',intCustomSub:'My own design',
+    customNoticeTitle:'📎 Custom instructions:',customNoticeText:'Upload 2 images to the AI — <strong>Image A = cover</strong>, <strong>Image B = interior page</strong>.<br>2 special prompts will be generated: one for Gemini ✅ and one for ChatGPT.',
     pDigital:'Digital Product',pDigitalSub:'Screen mockup',
     deviceType:'Device / Screen',
     devLaptop:'Laptop',devImac:'Desktop / iMac',devIpad:'iPad',devIphone:'iPhone',
@@ -902,6 +927,9 @@ var T = {
     pwSub:'Johanna Digital Seattle<br>Herramienta exclusiva — acceso privado',pwLbl:'Clave de acceso',pwBtn:'✦ Entrar',pwErr:'❌ Clave incorrecta. Intenta de nuevo.',pwFollowUs:'Síguenos',
     mjNote:'⚠️ Agrega al final: --cref [URL de tu imagen de producto]',
     bundleAlert:'⚠️ Selecciona al menos un producto para el bundle.',
+    nbBinding:'Tipo de encuadernación',bindKdp:'KDP / Perfect Bound',bindKdpSub:'Lomo plano — Amazon KDP ✓',bindSpiral:'Espiral / Wire-O',bindSpiralSub:'Espiral metálico',
+    interiorType:'Tipo de página interior',intGrid:'Cuadriculada',intLinedBW:'Lineal B&N',intLinedBlue:'Lineal azul',intCallig:'Caligrafía',intCustom:'Custom',intCustomSub:'Mi propio diseño',
+    customNoticeTitle:'📎 Instrucciones para Custom:',customNoticeText:'Sube 2 imágenes a la IA — <strong>Image A = portada</strong>, <strong>Image B = página interior</strong>.<br>Se generan 2 prompts especiales: uno para Gemini ✅ y uno para ChatGPT.',
     pDigital:'Producto Digital',pDigitalSub:'Mockup en pantalla',
     deviceType:'Dispositivo / Pantalla',
     devLaptop:'Laptop',devImac:'Desktop / iMac',devIpad:'iPad',devIphone:'iPhone',
@@ -956,6 +984,7 @@ var S = {
   candletype:'glass jar candle with label',
   bundleProducts:[],
   device:'laptop', digitalHand:'none',
+  nbBinding:'kdp', interiorPage:'grid',
   scene:'a warm boho living room with natural plants, macrame wall decor and soft window light',
   action:'holding the product up with both hands at chest level displaying the front cover clearly',
   char:'hands',ethnicity:'Latina',skin:'light skin tone',
@@ -963,7 +992,41 @@ var S = {
   unit:'in',customW:'',customH:''
 };
 
+var INTERIOR_PROMPTS = {
+  'grid':'grid paper interior pages with small uniform square grid pattern, light gray grid lines on white paper',
+  'lined-bw':'standard ruled lined pages, black and white, horizontal lines evenly spaced, classic Amazon KDP composition notebook interior',
+  'lined-blue':'ruled lined pages with blue horizontal lines on white paper, standard college-ruled style',
+  'calligraphy':'calligraphy practice guide pages with slanted dashed lines and baseline guides for lettering practice'
+};
+
 var PROD_LABELS = {notebook:'composition notebook',book:'book',tshirt:'t-shirt',hoodie:'hoodie',mug:'mug',sticker:'sticker',totebag:'tote bag',candle:'candle',bundle:'bundle',digital:'digital product'};
+
+function selNbBinding(btn,val){
+  btn.closest('.g2').querySelectorAll('.opt').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  S.nbBinding=val;
+}
+
+function selInterior(btn,val){
+  btn.closest('.g2').querySelectorAll('.opt').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  S.interiorPage=val;
+  var notice=document.getElementById('interior-custom-notice');
+  if(notice) notice.style.display=val==='custom'?'block':'none';
+}
+
+function showInterior(){
+  S.action='writing';
+  var box=document.getElementById('interior-page-box');
+  if(box) box.style.display='block';
+}
+
+function hideInterior(){
+  var box=document.getElementById('interior-page-box');
+  if(box) box.style.display='none';
+  var notice=document.getElementById('interior-custom-notice');
+  if(notice) notice.style.display='none';
+}
 
 // ===================== PASSWORD =====================
 function checkPw(){
@@ -1301,10 +1364,82 @@ function convertSize(){
   res.classList.add('show');S.size=S.customW+' x '+S.customH+' inches';
 }
 
+function generateNotebookCustom(){
+  var t=T[LANG];
+  var binding = S.nbBinding==='kdp'
+    ? 'PERFECT BOUND composition notebook — flat spine, absolutely NO spiral binding, NO wire-o, NO rings, NO coil'
+    : 'SPIRAL BOUND composition notebook with metal wire-o spiral on the left side';
+  var size = S.size;
+  var charDesc = getCharDesc();
+  var scene = S.scene;
+
+  var geminiPrompt =
+    'Hyper-realistic product photography of '+charDesc+'\'s hand actively writing with a pencil on an open notebook laying flat on '+scene+'.\n\n'+
+    'The open notebook is a '+binding+', measuring '+size+'.\n'+
+    'The notebook lies completely flat and open — two pages fully visible side by side.\n\n'+
+    'The open interior pages show EXACTLY the design from Image B (the second uploaded photo) — same illustrations, same colors, same layout, same style. Do NOT simplify, redesign or modify the interior pages in any way.\n\n'+
+    'The front cover of the notebook is leaning at the side, partially visible — reproduce it EXACTLY from Image A (the first uploaded photo) — same colors, same title, same characters, same design. Zero modifications.\n\n'+
+    'Camera: 85mm lens, shallow depth of field, warm natural daylight, DSLR, 8K.\n\n'+
+    'CRITICAL:\n'+
+    '— '+(S.nbBinding==='kdp'?'NO spiral binding anywhere in the image':'Metal spiral must be visible on left side of notebook')+'\n'+
+    '— Cover = Image A exact reproduction\n'+
+    '— Interior pages = Image B exact reproduction\n'+
+    '— Preserve both original designs 100%\n'+
+    '— ONE hand, ONE pencil, ONE notebook only';
+
+  var chatgptPrompt =
+    'Create an image based on these instructions:\n\n'+
+    'Ultra-realistic DSLR product photography, 85mm lens, f/1.8, 8K resolution, shallow depth of field, soft warm natural daylight.\n\n'+
+    'Scene: ONE '+binding+' ('+size+') is OPEN and lying completely flat on '+scene+'. The notebook is positioned like a real book — two pages fully visible side by side. The notebook is NOT closed and NOT standing.\n\n'+
+    'You will use TWO reference images:\n'+
+    '— Image A = the notebook FRONT COVER\n'+
+    '— Image B = the notebook INTERIOR PAGE DESIGN\n\n'+
+    'Interior pages: The TWO visible open pages must show EXACTLY the design from Image B. Preserve 100%: same characters, same illustrations, same text, same colors, same layout. DO NOT redraw, DO NOT reinterpret.\n\n'+
+    'Cover: Behind the open notebook, the front cover leans slightly upright, clearly showing Image A design. No modifications.\n\n'+
+    'Interaction: ONE realistic '+charDesc.toLowerCase()+'\'s hand gently holds a pencil and draws/writes on the right page only.\n\n'+
+    'BINDING: '+(S.nbBinding==='kdp'?'Perfect bound, flat spine. NO spiral, NO coil, NO rings.':'Spiral bound with metal wire-o on the left side.')+'\n\n'+
+    'CRITICAL: Only ONE notebook. Only ONE hand. Only ONE pencil. Image A = cover. Image B = interior pages. Preserve both 100%.';
+
+  // Show results with 2 special cards
+  var resultsEl = document.getElementById('results');
+  var geminiCard = document.querySelector('.pc-g');
+  var grokCard = document.querySelector('.pc-gr');
+  var mjCard = document.querySelector('.pc-mj');
+
+  // Update titles for custom interior context
+  var geminiTitle = document.querySelector('.pc-g .ptitle');
+  var geminiDesc = document.querySelector('.pc-g .pdesc');
+  var grokTitle = document.querySelector('.pc-gr .ptitle');
+  var grokDesc = document.querySelector('.pc-gr .pdesc');
+  var mjTitle = document.querySelector('.pc-mj .ptitle');
+  var mjDesc = document.querySelector('.pc-mj .pdesc');
+
+  if(geminiTitle) geminiTitle.textContent = LANG==='es' ? 'Para Gemini — Custom Interior' : 'For Gemini — Custom Interior';
+  if(geminiDesc) geminiDesc.textContent = LANG==='es' ? 'Sube Image A (portada) + Image B (página interior) + este prompt' : 'Upload Image A (cover) + Image B (interior page) + this prompt';
+  if(grokTitle) grokTitle.textContent = LANG==='es' ? 'Para ChatGPT — Custom Interior' : 'For ChatGPT — Custom Interior';
+  if(grokDesc) grokDesc.textContent = LANG==='es' ? 'Sube Image A + Image B y pega este prompt — ChatGPT generará la imagen' : 'Upload Image A + Image B and paste this prompt — ChatGPT will create the image';
+  if(mjTitle) mjTitle.textContent = LANG==='es' ? 'Para Midjourney — No aplica' : 'For Midjourney — Not applicable';
+  if(mjDesc) mjDesc.textContent = LANG==='es' ? 'Midjourney no soporta 2 imágenes de referencia para este caso. Usa Gemini o ChatGPT.' : 'Midjourney does not support 2 reference images for this case. Use Gemini or ChatGPT.';
+
+  document.getElementById('pt-gemini').textContent = geminiPrompt;
+  document.getElementById('pt-grok').textContent = chatgptPrompt;
+  document.getElementById('pt-mj').textContent = LANG==='es'
+    ? '⚠️ Para mockups con páginas internas personalizadas (Custom), Midjourney no puede usar 2 imágenes de referencia simultáneamente.\n\nRecomendación: Usa Gemini (mejor resultado) o ChatGPT con el prompt de arriba.\n\nSi quieres usar Midjourney, puedes usar la portada con --cref y describir la página interior en texto en el prompt.'
+    : '⚠️ For mockups with custom interior pages, Midjourney cannot use 2 reference images simultaneously.\n\nRecommendation: Use Gemini (best result) or ChatGPT with the prompt above.\n\nIf you want to use Midjourney, you can use the cover with --cref and describe the interior page in text within the prompt.';
+
+  showResults();
+}
+
 // ===================== PRODUCT DETAIL =====================
 function getProductDetail(){
   var p=S.product;
-  if(p==='notebook'||p==='book') return 'The product is a '+PROD_LABELS[p]+' measuring '+S.size+' — real-life size, do NOT make it look oversized or like a poster.';
+  if(p==='notebook'){
+    var binding = S.nbBinding==='kdp'
+      ? 'perfect bound composition notebook with a flat spine — NO spiral binding, NO wire-o, NO rings, NO coil'
+      : 'spiral bound composition notebook with a metal wire-o spiral on the left side';
+    return 'The product is a '+binding+', measuring '+S.size+' — real-life size, do NOT make it look oversized or like a poster.';
+  }
+  if(p==='book') return 'The product is a book measuring '+S.size+' — real-life size, do NOT make it look oversized or like a poster.';
   if(p==='tshirt') return 'The product is a '+S.shirtColor+' Bella Canvas t-shirt brand '+S.brand+'.';
   if(p==='hoodie') return 'The product is a '+S.shirtColor+' hoodie brand '+S.brand+'.';
   if(p==='mug') return 'The product is a '+S.mugstyle+'.';
@@ -1342,6 +1477,13 @@ function generate(){
     generateDigital();
     return;
   }
+
+  // Special: Notebook + Writing + Custom interior
+  if(S.product==='notebook' && S.action==='writing' && S.interiorPage==='custom'){
+    generateNotebookCustom();
+    return;
+  }
+
   if(S.product==='bundle'){
     if(!S.bundleProducts||S.bundleProducts.length===0){alert(t.bundleAlert);return;}
     var pl=S.bundleProducts.join(', ');
@@ -1354,7 +1496,18 @@ function generate(){
   }
   var pd=getProductDetail();
   var cd=getCharDesc();
-  var scene=S.scene,action=S.action,palette=S.palette;
+  var scene=S.scene,palette=S.palette;
+
+  // Build action string — for notebook writing with interior page selected
+  var action = S.action;
+  if(S.product==='notebook' && S.action==='writing'){
+    var binding = S.nbBinding==='kdp'
+      ? 'perfect bound, flat spine, NO spiral'
+      : 'spiral bound with metal wire-o on the left';
+    var interiorDesc = INTERIOR_PROMPTS[S.interiorPage] || 'lined pages';
+    action = 'actively writing with a pencil on an open notebook ('+binding+'). The open interior pages show '+interiorDesc+'. The front cover is leaning at the side, partially visible.';
+  }
+
   var gChar=(S.char==='girl'||S.char==='boy')?'A pair of hands':cd;
   var gp='Hyper-realistic professional product photography.\n'+gChar+' '+action+'.\n\nSetting: '+scene+'.\n'+pd+'\nScene colors: '+palette+'.\n\nCamera: 85mm lens, shallow depth of field, soft natural light, DSLR quality, 8K resolution.\n\n'+CRITICAL;
   var grok='Hyper-realistic professional product photography.\n'+cd+' '+action+'.\n\nSetting: '+scene+'.\n'+pd+'\nScene colors: '+palette+'.\n\nCamera: 85mm lens, shallow depth of field, cinematic natural light, DSLR, 8K, ultra-detailed textures.\n\n'+CRITICAL;
